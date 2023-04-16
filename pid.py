@@ -20,9 +20,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-import sys
-import math
-
 class PID:
     """
     Implementacion de un PID discreto en la forma:
@@ -40,6 +37,17 @@ class PID:
         self.Normalizacion=1 
 
     def set_parameters(self,**kargs):
+        """ Establece los parametros del PID
+        
+        Kp: Ganancia proporcional
+        Ki: Ganancia integral
+        Kd: Ganancia derivativa
+        Ts: Periodo de muestreo
+        N: Orden del filtro derivativo
+        
+        Tener en cuenta que Kp tambien se puede utilizar como constante para ajustar unidades. 
+        Como el PID es de la forma Kp(e + D(Ki) + I(Ki)) resulta que Ki y Kd estan multiplicadas por Kp.
+        """
         self.Kp=kargs.get('Kp')
         self.Ki=kargs.get('Ki')
         self.Kd=kargs.get('Kd')
@@ -51,10 +59,15 @@ class PID:
         self.D_1=2.0 / (N * Ts + 2.0)# Bilinear or tustin
         self.I_1=Ts / 2.0
 
-    def run(self,y_sp_,y_):
-        """        
-        y_sp: Set point
-        y_: medida
+    def run(self,y_sp_=float,y_=float)->float :
+        """ Obtiene la señal de control a partir de la señal de error (set point - medida)  
+              
+        Inputs:
+        .- y_sp: Set point
+        .- y_: medida
+        
+        Outputs:
+        .- u: señal de control (-self.limit, self.limit)
         """
         # Se acomodan las unidades
         y_=y_ * self.Normalizacion
