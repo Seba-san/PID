@@ -61,6 +61,11 @@ class PID:
 
     def run(self,y_sp_=float,y_=float)->float :
         """ Obtiene la señal de control a partir de la señal de error (set point - medida)  
+
+        En caso de que el error requiera aplicar una función externa a esta clase, se debe
+        llamar de la siguiente manera:
+        error=funcion_externa()
+        run(y_sp_=0,y_=-error)
               
         Inputs:
         .- y_sp: Set point
