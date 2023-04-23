@@ -52,6 +52,8 @@ class PID:
         self.Ki=kargs.get('Ki')
         self.Kd=kargs.get('Kd')
         self.Ts=kargs.get('Ts')
+        if self.Ts==0.0:
+            raise ValueError('El valor de Ts no puede ser cero')
         self.N=kargs.get('N',10)
         N=self.N
         Ts=self.Ts
